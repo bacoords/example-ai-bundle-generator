@@ -3,7 +3,7 @@
  */
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
-import { Button, Flex } from '@wordpress/components';
+import { Button, Flex, Card, CardBody, CardMedia, CardFooter, __experimentalGrid as Grid } from '@wordpress/components';
 import * as Woo from '@woocommerce/components';
 import { Fragment, useEffect, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
@@ -141,19 +141,29 @@ const AIBundleGenerator = () => {
 				onChange={ searchFullProducts }
 				inlineTags
 			/>
-			{ products.length > 0 && fullProducts.length > 0 && (
-				<Fragment>
-					<ul>
+		</Woo.Section>
+
+
+		{ products.length > 0 && fullProducts.length > 0 && (
+			<Woo.Section component="article" style={ { marginTop: '20px' } }>
+				<Fragment >
+					<Grid gap={ 2 } columns={ 4 }>
 						{ fullProducts.map( ( product ) => (
-							<li key={ product.key }>
-								<Woo.ProductImage product={ product } />
-								{ product.label }
-							</li>
+							<Card key={ product.key }>
+								<CardMedia>
+									<Woo.ProductImage product={ product } />
+								</CardMedia>
+								<CardBody>
+									<h3>{ product.label }</h3>
+								</CardBody>
+							</Card>
 						) ) }
-					</ul>
+					</Grid>
 				</Fragment>
+			</Woo.Section>
 			) }
 			{ products.length > 1 && fullProducts.length > 1 && (
+				<Woo.Section component="article">
 				<Fragment>
 					<Flex justify="flex-end">	
 						<Button variant="secondary" onClick={ () => setProducts( [] ) }>
@@ -164,23 +174,27 @@ const AIBundleGenerator = () => {
 						</Button>
 					</Flex>
 				</Fragment>
+			</Woo.Section>
 			) }
-		</Woo.Section>
-
-
 		{ excerpt && (
 			<Woo.Section component="article">
 				<Woo.SectionHeader title={ __( 'Generated Bundle Description', 'ai-bundle-generator' ) } />
-				<h2>{ bundleTitle }</h2>
-				<p>{ excerpt }</p>
-				<Flex justify="flex-end">
-					<Button variant="secondary" onClick={ () => setExcerpt( '' ) }>
-						{ __( 'Clear', 'ai-bundle-generator' ) }
-					</Button>
-					<Button variant="primary" onClick={ createBundle }>
-						{ __( 'Create Bundle Product', 'ai-bundle-generator' ) }
-					</Button>
-				</Flex>
+				<Card>
+					<CardBody>
+						<h2>{ bundleTitle }</h2>
+						<p>{ excerpt }</p>
+					</CardBody>
+					<CardFooter>
+
+							<Button variant="secondary" onClick={ () => setExcerpt( '' ) }>
+								{ __( 'Clear', 'ai-bundle-generator' ) }
+							</Button>
+							<Button variant="primary" onClick={ createBundle }>
+								{ __( 'Create Bundle Product', 'ai-bundle-generator' ) }
+							</Button>
+
+					</CardFooter>
+				</Card>
 			</Woo.Section>
 		) }
 
